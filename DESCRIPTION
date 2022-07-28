@@ -1,0 +1,13 @@
+Package: libGetDataR
+Type: Package
+Title: general pupose library to manipulate data
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: Lucas Monteiro <lucas.ma8338@gmail.com>
+Description: -
+License: -
+Encoding: UTF-8
+LazyData: true
+imports:
+    dplyr
+    glue
