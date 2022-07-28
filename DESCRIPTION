@@ -11,3 +11,4 @@ LazyData: true
 imports:
     dplyr
     glue
+    progress
