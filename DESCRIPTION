@@ -12,3 +12,4 @@ imports:
     dplyr
     glue
     svMisc
+	dplyr
