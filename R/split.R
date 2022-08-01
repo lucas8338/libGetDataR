@@ -1,6 +1,7 @@
 #' split a timeseries data (data.frame) in to a x/y to fit a model
 library(parallel)
 library(doParallel)
+library(foreach)
 library(svMisc)
 
 split.x_y_timeseries_split<- function(data,input_size,output_size,n_jobs=-1){
@@ -16,7 +17,7 @@ split.x_y_timeseries_split<- function(data,input_size,output_size,n_jobs=-1){
   data.x<-list()
   data.y<-list()
   iters<- 1:((nrow(data)-sequence_size)+1)
-  doParallel::foreach(i = iters)%dopar%{
+  foreach::foreach(i = iters)%dopar%{
     svMisc::progress(i,length(iters))
     visible.data<-data[i:(sequence_size+(i-1)),]
     data.x<-append(data.x,list(as.data.frame(visible.data[1:input_size,])))

@@ -15,3 +15,4 @@ imports:
 	dplyr
 	parallel
 	doParallel
+	foreach
