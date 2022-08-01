@@ -1,4 +1,7 @@
 #' split a timeseries data (data.frame) in to a x/y to fit a model
+library(parallel)
+library(doParallel)
+library(svMisc)
 
 split.x_y_timeseries_split<- function(data,input_size,output_size,n_jobs=-1){
   if (n_jobs>0){
