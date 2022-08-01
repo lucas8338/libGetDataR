@@ -2,7 +2,8 @@
 
 split.x_y_timeseries_split<- function(data,input_size,output_size,n_jobs=-1){
   if (n_jobs>0){
-    cl<- parallel::makeCluster(n_jobs)
+    ncores<- parallel::detectCores()
+    cl<- parallel::makeCluster(ncores-(n_jobs+1))
     doParallel::registerDoParallel(cl)
   }
   sequence_size<- input_size+output_size
@@ -19,6 +20,8 @@ split.x_y_timeseries_split<- function(data,input_size,output_size,n_jobs=-1){
     data.y<-append(data.y,list(as.data.frame(visible.data[(input_size+1):nrow(visible.data),])))
 
   }
-  parallel::stopCluster(cl)
+  if (n_jobs>0){
+    parallel::stopCluster(cl)
+  }
   list(data.x,data.y)
 }
