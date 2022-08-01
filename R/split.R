@@ -4,7 +4,7 @@ library(doParallel)
 library(svMisc)
 
 split.x_y_timeseries_split<- function(data,input_size,output_size,n_jobs=-1){
-  if (n_jobs>0){
+  if (n_jobs!=0){
     ncores<- parallel::detectCores()
     cl<- parallel::makeCluster(ncores-(n_jobs+1))
     doParallel::registerDoParallel(cl)
@@ -23,7 +23,7 @@ split.x_y_timeseries_split<- function(data,input_size,output_size,n_jobs=-1){
     data.y<-append(data.y,list(as.data.frame(visible.data[(input_size+1):nrow(visible.data),])))
 
   }
-  if (n_jobs>0){
+  if (n_jobs!=0){
     parallel::stopCluster(cl)
   }
   list(data.x,data.y)
