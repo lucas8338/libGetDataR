@@ -13,6 +13,3 @@ imports:
     glue
     svMisc
 	dplyr
-	parallel
-	doParallel
-	foreach
