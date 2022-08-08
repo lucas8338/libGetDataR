@@ -36,5 +36,5 @@ split.x_y_timeseries_split <- function(data, input_size, output_size, auto_resiz
   for (i in iters){
     result<-append(result,process(i))
   }
-  list(data.x, data.y)
+  result
 }
