@@ -3,6 +3,7 @@ library(parallel)
 library(doParallel)
 library(foreach)
 library(svMisc)
+library(compiler)
 
 #' A function to split a dataframe into x and y
 #' remember the y is still a dataframe need to be processed to fit
@@ -32,9 +33,10 @@ split.x_y_timeseries_split <- function(data, input_size, output_size, auto_resiz
     y<- visible.data[(input_size + 1):nrow(visible.data),]
     list(x=x,y=y)
   }
+  cproc<-compiler::cmpfun(process)
   result<-list()
   for (i in iters){
-    p<- process(i)
+    p<- cproc(i)
     result[['x']]<-append(result[['x']],list(p[['x']]))
     result[['y']]<-append(result[['y']],list(p[['y']]))
   }
