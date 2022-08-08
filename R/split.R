@@ -35,8 +35,8 @@ split.x_y_timeseries_split <- function(data, input_size, output_size, auto_resiz
   result<-list()
   for (i in iters){
     p<- process(i)
-    result[['x']]<-append(result[['x']],p[['x']])
-    result[['y']]<-append(result[['y']],p[['y']])
+    result[['x']]<-append(result[['x']],list(p[['x']]))
+    result[['y']]<-append(result[['y']],list(p[['y']]))
   }
   result
 }
