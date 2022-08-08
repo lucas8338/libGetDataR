@@ -25,13 +25,16 @@ split.x_y_timeseries_split <- function(data, input_size, output_size, auto_resiz
   data.y <- list()
   iters <- 1:((nrow(data) - sequence_size) + 1)
 
-  for (i in iters){
+  process<-function (i){
     svMisc::progress(i, length(iters))
     visible.data <- data[i:(sequence_size + (i - 1)),]
     x<- visible.data[1:input_size,]
     y<- visible.data[(input_size + 1):nrow(visible.data),]
-    data.x<- append(data.x,as.data.frame(x))
-    data.y<- append(data.y,as.data.frame(y))
+    list(x,y)
+  }
+  result<-list()
+  for (i in iters){
+    result<-append(result,process(i))
   }
   list(data.x, data.y)
 }
