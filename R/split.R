@@ -30,11 +30,13 @@ split.x_y_timeseries_split <- function(data, input_size, output_size, auto_resiz
     visible.data <- data[i:(sequence_size + (i - 1)),]
     x<- visible.data[1:input_size,]
     y<- visible.data[(input_size + 1):nrow(visible.data),]
-    list(x,y)
+    list(x=x,y=y)
   }
   result<-list()
   for (i in iters){
-    result<-append(result,process(i))
+    p<- process(i)
+    result[['x']]<-append(result[['x']],p[['x']])
+    result[['y']]<-append(result[['y']],p[['y']])
   }
   result
 }
