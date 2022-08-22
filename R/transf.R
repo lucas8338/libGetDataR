@@ -1,8 +1,7 @@
-transf.diff <- function(data){
-  nd <- c()
-  for (i in 1:(length(data) - 1)){
-    nd <- append(nd, data[i + 1] - data[i])
+transf.diff <- function(data, lag=1, differences=1){
+  ndata<- diff(data,lag=lag,differences = differences)
+  while (length(ndata)<length(data)){
+    ndata<- append(ndata,NA,after = 0)
   }
-  nd <- append(nd, NA, after = 0)
-  nd
+  ndata
 }
