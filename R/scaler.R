@@ -16,7 +16,7 @@ setMethod("predict", "scaler.min_max",
             for (column in colnames(object@stat)){
               min <- object@stat['min', column]
               max <- object@stat['max', column]
-              data[column] <- lapply(data[, column], FUN = function(x){(x - min) / (max - min)}) %>% unlist()
+              data[[column]] <- lapply(data[, column], FUN = function(x){(x - min) / (max - min)}) %>% unlist()
             }
             data
           }
@@ -31,6 +31,9 @@ scaler.min_max <- function(data, columns){
   for (column in columns){
     stat['min', column] <- min(data[, column])
     stat['max', column] <- max(data[, column])
+    if (stat['min', column]%>%is.numeric()==FALSE | stat['max', column]%>%is.numeric()==FALSE){
+      stop(glue("some value of the column: {column} is not numeric"))
+    }
   }
   new("scaler.min_max", stat = stat)
 }
