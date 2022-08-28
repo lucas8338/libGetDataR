@@ -12,7 +12,7 @@ library(compiler)
 #' @param output_size
 #' @param n_jobs
 #' @return list(data.x,data.y)
-split.x_y_timeseries_split <- function(data, input_size, output_size, auto_resize = TRUE){
+split.x_y_timeseries_split <- function(data, input_size, output_size, auto_resize = TRUE, wt = 0, wt_dir = '', wt_name= "part{i}.rds", wt_compress = FALSE){
   sequence_size <- input_size + output_size
   if (nrow(data) %% sequence_size != 0){
     if (auto_resize == TRUE){
@@ -35,10 +35,26 @@ split.x_y_timeseries_split <- function(data, input_size, output_size, auto_resiz
   }
   cproc<-compiler::cmpfun(process)
   result<-list()
+  if ( wt > 0 ){
+    part<- c(length(iters))
+    for (i in iters){
+      if ( i %% wt == 0 ){
+        part<- append(part, i, after = 0)
+      }
+    }
+  }
   for (i in iters){
     p<- cproc(i)
     result[['x']]<-append(result[['x']],list(p[['x']]))
     result[['y']]<-append(result[['y']],list(p[['y']]))
+    if (wt > 0){
+      if ( i %in% part ){
+        saveRDS(result,file = glue::glue("{wt_dir}/{eval(glue::glue(wt_name))}"),compress=wt_compress)
+        rm(result)
+        result<- list()
+        invisible(gc())
+      }
+    }
   }
   result
 }
