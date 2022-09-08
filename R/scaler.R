@@ -1,10 +1,4 @@
-#' Scalers to reescaling the data
-#'
-#' @details
-#'    - scaler.min_max: a mix-max scalling using the formula x=(x-min)/(max-min); x is the actual value of a column
-#'      of a data.frame
-#'
-
+# this library has methods to scaling data
 
 library(dplyr)
 library(glue)
@@ -22,10 +16,11 @@ setMethod("predict", "scaler.min_max",
           }
 )
 
+#' @title scaler.min_max: a min_max scaler
 #' @param data: is the data to be applied the transformation
 #' @param column: a vector/list wtth the names of columns to apply the transformation
 #' @return: return a instance of class 'scaler.min_max' to use the 'predict' method
-#'
+#' @export
 scaler.min_max <- function(data, columns){
   stat <- data.frame(row.names = c('min', 'max'))
   for (column in columns){

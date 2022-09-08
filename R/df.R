@@ -1,9 +1,15 @@
-#' this file contains functions to preprocess data.frames compatible
+# this file contains functions to expand the data.frame compatible functionalities
+
 library(dplyr)
 library(tidyr)
 
-#' this function will transform the dataframe with missing data in exactly espaced data
-#' this receive a data.frame in this 'data' argument and a vector in the 'index' argument
+#' @title df.asfreq: equaly spaced data.frame
+#' @description this function will turn a data.frame with missing dates in a equaly spaced
+#' data.frame, with NA in the new datas
+#' @param data the data.frame
+#' @param freq number the frequency
+#' @return data.frame
+#' @export
 df.asfreq <- function(data,freq){
   rn<- rownames(data)%>%as.numeric()
   index<- seq(from = rn[1],to=rn[length(rn)],by=freq)

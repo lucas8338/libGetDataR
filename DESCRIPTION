@@ -1,10 +1,11 @@
 Package: libGetDataR
 Title: general pupose library to manipulate data
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: 
     person("Lucas", "Monteiro", , "lucas.ma8338@gmail.com", role= c('cre'))
 Description: -
 License: -
 Encoding: UTF-8
 LazyData: true
-depends: dplyr, glue, svMisc
+depends: dplyr, glue, svMisc, foreach, doParallel, parallel
+RoxygenNote: 7.1.2

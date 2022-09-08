@@ -1,17 +1,26 @@
-#' split a timeseries data (data.frame) in to a x/y to fit a model
+# this file contains functions to split the data to train test for machine leanring
+
 library(parallel)
 library(doParallel)
 library(foreach)
 library(svMisc)
 library(compiler)
 
-#' A function to split a dataframe into x and y
-#' remember the y is still a dataframe need to be processed to fit
-#' @param data
-#' @param input_size
-#' @param output_size
-#' @param n_jobs
+#' @title xplit.x_y_timeseries_split: a function to split a data.frame into train/test
+#' @description this function will to split a data.frame into train/test to use it to
+#' train a machine learning model, this will just split will not to transform or anything
+#'
+#' @param data the data
+#' @param input_size number the size of input
+#' @param output_size number the size of output
+#' @param auto _resize whether to remove rows whether data size is not multiple of inputsize*output_size
+#' @param wt whether >1 the data will split the generated samples to storage, this only should to be used wheter ram ins insuficient
+#' @param wt_dir folder to save the splited samples
+#' @param wt_name the name of the parts, this will be evaluated through glue so this can have variables inside '{}'
+#' @param wt_compress if or not to compress the generated sample part (compressing will reduce the file size but
+#' will take more time to save)
 #' @return list(data.x,data.y)
+#' @export
 split.x_y_timeseries_split <- function(data, input_size, output_size, auto_resize = TRUE, wt = 0, wt_dir = '', wt_name= "part{i}.rds", wt_compress = FALSE){
   sequence_size <- input_size + output_size
   if (nrow(data) %% sequence_size != 0){
