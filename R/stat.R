@@ -32,11 +32,7 @@ stat.ccm<- function(data,endog.columns=colnames(data),exog.columns=colnames(data
   col.comb<- foreach::foreach( excolumn=exog.columns,.combine = 'c' )%dopar%{
     col.intcomb<-c()
     for ( endcolumn in endog.columns ){
-      if ( endcolumn==excolumn ){
-        next
-      }else{
-        col.intcomb<- append(col.intcomb,glue::glue("{excolumn}->{endcolumn}"))
-      }
+      col.intcomb<- append(col.intcomb,glue::glue("{excolumn}->{endcolumn}"))
     }
     col.intcomb
   }
