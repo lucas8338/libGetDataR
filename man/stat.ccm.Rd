@@ -2,10 +2,12 @@
 % Please edit documentation in R/stat.R
 \name{stat.ccm}
 \alias{stat.ccm}
-\title{stat.ccm: coss-correlation maxtrix}
+\title{stat.ccm: coss-correlation matrix}
 \usage{
 stat.ccm(
   data,
+  endog.columns = colnames(data),
+  exog.columns = colnames(data),
   lag.max = 50,
   lag.min = 0,
   na.action = stats::na.pass,
@@ -15,6 +17,11 @@ stat.ccm(
 }
 \arguments{
 \item{data}{the data.frame}
+
+\item{endog.columns}{column to be used as y, among all columns, another words the columns in this parameters
+will be like 'endogenous' columns}
+
+\item{exog.columns}{columns to be use as x}
 
 \item{lag.max}{the maximum value of lag to consider}
 
