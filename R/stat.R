@@ -83,13 +83,28 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
     combs
   }
 
-  # generate the results if up or down for each column
-  print('going')
-  print(colnames(data))
+  # generate the results if the price/value is up or down for each column
   columnsHistory<- foreach::foreach(dotColumn=colnames(data),.packages = c('Rcpp'))%dopar%{
     result<- stat_bllcorr_downOrUp(data[[dotColumn]])
     list(column=dotColumn,result=result)
   }
-  dd<<- columnsHistory
-  stop()
+  # creates a data.frame to storage better way the results from the list 'columnsHistory'
+  columnsHistoryDf<- data.frame(row.names = 1:(nrow(data)) )
+  for ( item in columnsHistory ){
+    columnsHistory[[item[['column']]]]<- item[['result']]
+  }
+  # bellow will set the variable 'columnsHistory' by the columnsHistoryDf
+  # cause it is a data.frame and will trigger the garbage colector to free ram
+  columnsHistory<- columnsHistoryDf
+  invisible(gc())
+  # bellow wil process the if or not the exog was capable to predict the endog
+  foreach::foreach(dotComb=combs, .packages = c('Rcpp'))%dopar%{
+    splittedName<- stringr::str_split(dotComb,pattern = '->')[[1]]
+    exog.name<- splittedName[[1]]
+    endog.name<- splittedName[[2]]
+    .exog<- columnsHistory[[exog.name]]
+    .endog<- columnsHistory[[endog.name]]
+    
+  }
+
 }
