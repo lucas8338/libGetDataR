@@ -64,7 +64,7 @@ stat.ccm<- function(data,endog.columns=colnames(data),exog.columns=colnames(data
 stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=colnames(data),lags=1:50,threads.num=parallel::detectCores(),threads.type="PSOCK"){
   # register the cluster for paralellization through foreach
   cl<- parallel::makeCluster(threads.num,type = threads.type)
-  doParallel::registerDoParallel(cl)
+  doSNOW::registerDoSNOW(cl)
   on.exit(parallel::stopCluster(cl))
 
   # generates a sequence which rows i want for the data
@@ -75,6 +75,7 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
   # declare a variable containing all combinations of columns endog and exog
   # separated by '->'
   columnsCombinations<- foreach::foreach(dotColumn=endog.columns,.combine='c')%dopar%{
+
     # will store the combination for each endog column
     combs<-c()
     for (..column in exog.columns){
@@ -85,7 +86,9 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
   }
   columnsCombinations<<- columnsCombinations
   # generate the results if the price/value is up or down for each column
-  columnsHistory<- foreach::foreach(dotColumn=colnames(data),.packages = c('Rcpp'))%dopar%{
+  pg.it<- length(colnames(data))
+  pg<- util.generateForeachProgressBar(pg.it)
+  columnsHistory<- foreach::foreach(dotColumn=colnames(data),.packages = c('Rcpp'),.options.snow=pg)%dopar%{
     result<- stat_bllcorr_downOrUp(data[[dotColumn]])
     list(column=dotColumn,result=result)
   }
@@ -100,7 +103,9 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
   columnsHistory<<- columnsHistory
   invisible(gc())
   # bellow wil process the if or not the exog was capable to predict the endog
-  lagsResults<- foreach::foreach(dotComb=columnsCombinations, .packages = c('Rcpp'))%do%{
+  pg.it<- length(columnsCombinations)
+  pg<- util.generateForeachProgressBar(pg.it)
+  lagsResults<- foreach::foreach(dotComb=columnsCombinations, .packages = c('Rcpp'),.options.snow=pg)%dopar%{
     splittedName<- unlist(stringr::str_split(dotComb,pattern = '->'))
     exog.name<- splittedName[[1]]
     endog.name<- splittedName[[2]]
@@ -114,12 +119,16 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
       print(exog.name)
       print(endog.name)
       res<- stat_bllcorr_doesExogPredictsEndogCateg(exog=..exog,endog=..endog)
-      laggedRes[[dotComb]][[.lag]]<- res
+      laggedRes[['column']]<- dotComb
+      laggedRes[['result']][[.lag]]<- res
     }
     laggedRes
   }
 
-  lagsResults<<- lagsResults
-  stop()
+  # result.1 will be the percent of the values was most predicted
+  result.1<- data.frame(row.names = lags)
+  for ( .item in lagsResults ){
+
+  }
 
 }
