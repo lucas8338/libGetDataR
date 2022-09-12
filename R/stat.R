@@ -67,6 +67,11 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
   doSNOW::registerDoSNOW(cl)
   on.exit(parallel::stopCluster(cl))
 
+  if ( step!=1 && nrow(data)%%step!=0 ){
+    data<- data[(1+(nrow(data)%%steps)),]
+  }
+  stopifnot(nrow(data)%%steps==0)
+
   # generates a sequence which rows i want for the data
   seqFilterDataframe<- seq(from=1,to=nrow(data),by=step)
   # get only the rows i want (setted upper) and the columns will be used
@@ -93,14 +98,13 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
     list(column=dotColumn,result=result)
   }
   # creates a data.frame to storage better way the results from the list 'columnsHistory'
-  columnsHistoryDf<- data.frame( row.names = 1:(nrow(data)) )
+  columnsHistoryDf<- data.frame( row.names = rownames(data) )
   for ( item in columnsHistory ){
     columnsHistoryDf[[item[['column']]]]<- item[['result']]
   }
   # bellow will set the variable 'columnsHistory' by the columnsHistoryDf
   # cause it is a data.frame and will trigger the garbage colector to free ram
   columnsHistory<- columnsHistoryDf
-  columnsHistory<<- columnsHistory
   invisible(gc())
   # bellow wil process the if or not the exog was capable to predict the endog
   pg.it<- length(columnsCombinations)
@@ -116,19 +120,30 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
     for ( .lag in lags ){
       ..exog<- dplyr::lag(.exog,n=as.integer(.lag))
       ..endog<- .endog
-      print(exog.name)
-      print(endog.name)
       res<- stat_bllcorr_doesExogPredictsEndogCateg(exog=..exog,endog=..endog)
       laggedRes[['column']]<- dotComb
-      laggedRes[['result']][[.lag]]<- res
+      laggedRes[['result']][[as.character(.lag)]]<- res
     }
     laggedRes
   }
-
-  # result.1 will be the percent of the values was most predicted
+  lagsResults<<- lagsResults
+  # 'result.1' will be the percent of the values was most predicted
   result.1<- data.frame(row.names = lags)
-  for ( .item in lagsResults ){
-
+  pg.it<- length(columnsCombinations)
+  pg<- util.generateForeachProgressBar(pg.it)
+  endDf<- foreach::foreach( item=lagsResults,.combine = cbind,.options.snow=pg )%dopar%{
+    endDf<- data.frame(row.names = lags)
+    for ( lagName in names(item[['result']]) ){
+      statistic<- item[['result']][[lagName]]
+      oposite<- statistic[['-1']]
+      favour<- statistic[['1']]
+      total<- oposite+favour
+      bigger<- max(c(oposite,favour))
+      percent<- bigger/total
+      endDf[lagName,item[['column']]]<- percent
+    }
+    endDf
   }
+  endDf
 
 }
