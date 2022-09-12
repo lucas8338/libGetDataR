@@ -53,3 +53,43 @@ stat.ccm<- function(data,endog.columns=colnames(data),exog.columns=colnames(data
   }
   result
 }
+
+#' @title stat.billcor: still doing
+#' @useDynLib libGetDataR
+#' @import parallel
+#' @import doParallel
+#' @import foreach
+#' @export
+stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=colnames(data),threads.num=parallel::detectCores(),threads.type="PSOCK"){
+  # register the cluster for paralellization through foreach
+  cl<- parallel::makeCluster(threads.num,type = threads.type)
+  doParallel::registerDoParallel(cl)
+  on.exit(parallel::stopCluster(cl))
+
+  # generates a sequence which rows i want for the data
+  seqFilterDataframe<- seq(from=1,to=nrow(data),by=step)
+  # get only the rows i want (setted upper) and the columns will be used
+  # (endog.columns+exog.columns)
+  data<- data[seqFilterDataframe,unique(c(endog.columns,exog.columns))]
+  # declare a variable containing all combinations of columns endog and exog
+  # separated by '->'
+  columnsCombinations<- foreach::foreach(dotColumn=endog.columns,.combine='c')%dopar%{
+    # will store the combination for each endog column
+    combs<-c()
+    for (..column in exog.columns){
+      combs<- append(combs,glue::glue("{..column}->{dotColumn}"))
+    }
+    # return the combs for each iteration of foreach's loop
+    combs
+  }
+
+  # generate the results if up or down for each column
+  print('going')
+  print(colnames(data))
+  columnsHistory<- foreach::foreach(dotColumn=colnames(data),.packages = c('Rcpp'))%dopar%{
+    result<- stat_bllcorr_downOrUp(data[[dotColumn]])
+    list(column=dotColumn,result=result)
+  }
+  dd<<- columnsHistory
+  stop()
+}

@@ -8,4 +8,5 @@ License: -
 Encoding: UTF-8
 LazyData: true
 depends: dplyr, glue, svMisc, foreach, doParallel, parallel
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
+LinkingTo: Rcpp
