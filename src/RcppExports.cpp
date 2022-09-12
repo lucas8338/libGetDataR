@@ -21,9 +21,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// stat_bllcorr_doesExogPredictsEndogCateg
+NumericVector stat_bllcorr_doesExogPredictsEndogCateg(NumericVector exog, NumericVector endog);
+RcppExport SEXP _libGetDataR_stat_bllcorr_doesExogPredictsEndogCateg(SEXP exogSEXP, SEXP endogSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type exog(exogSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type endog(endogSEXP);
+    rcpp_result_gen = Rcpp::wrap(stat_bllcorr_doesExogPredictsEndogCateg(exog, endog));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_libGetDataR_stat_bllcorr_downOrUp", (DL_FUNC) &_libGetDataR_stat_bllcorr_downOrUp, 1},
+    {"_libGetDataR_stat_bllcorr_doesExogPredictsEndogCateg", (DL_FUNC) &_libGetDataR_stat_bllcorr_doesExogPredictsEndogCateg, 2},
     {NULL, NULL, 0}
 };
 

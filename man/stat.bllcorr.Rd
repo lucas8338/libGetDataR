@@ -9,6 +9,7 @@ stat.bllcorr(
   step = 1,
   endog.columns = colnames(data),
   exog.columns = colnames(data),
+  lags = 1:50,
   threads.num = parallel::detectCores(),
   threads.type = "PSOCK"
 )

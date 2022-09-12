@@ -17,6 +17,7 @@
 #' @param threads the number of processes to run in parallel through foreach package
 #' @param threads_type the type of threads for the foreach package can be 'PSOCK' or 'FORK', default: 'PSOCK'
 #' 'FORK' cant be used on windows
+#' @import doParallel
 #' @import foreach
 #' @import parallel
 #' @import dplyr
@@ -60,7 +61,7 @@ stat.ccm<- function(data,endog.columns=colnames(data),exog.columns=colnames(data
 #' @import doParallel
 #' @import foreach
 #' @export
-stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=colnames(data),threads.num=parallel::detectCores(),threads.type="PSOCK"){
+stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=colnames(data),lags=1:50,threads.num=parallel::detectCores(),threads.type="PSOCK"){
   # register the cluster for paralellization through foreach
   cl<- parallel::makeCluster(threads.num,type = threads.type)
   doParallel::registerDoParallel(cl)
@@ -82,29 +83,43 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
     # return the combs for each iteration of foreach's loop
     combs
   }
-
+  columnsCombinations<<- columnsCombinations
   # generate the results if the price/value is up or down for each column
   columnsHistory<- foreach::foreach(dotColumn=colnames(data),.packages = c('Rcpp'))%dopar%{
     result<- stat_bllcorr_downOrUp(data[[dotColumn]])
     list(column=dotColumn,result=result)
   }
   # creates a data.frame to storage better way the results from the list 'columnsHistory'
-  columnsHistoryDf<- data.frame(row.names = 1:(nrow(data)) )
+  columnsHistoryDf<- data.frame( row.names = 1:(nrow(data)) )
   for ( item in columnsHistory ){
-    columnsHistory[[item[['column']]]]<- item[['result']]
+    columnsHistoryDf[[item[['column']]]]<- item[['result']]
   }
   # bellow will set the variable 'columnsHistory' by the columnsHistoryDf
   # cause it is a data.frame and will trigger the garbage colector to free ram
   columnsHistory<- columnsHistoryDf
+  columnsHistory<<- columnsHistory
   invisible(gc())
   # bellow wil process the if or not the exog was capable to predict the endog
-  foreach::foreach(dotComb=combs, .packages = c('Rcpp'))%dopar%{
-    splittedName<- stringr::str_split(dotComb,pattern = '->')[[1]]
+  lagsResults<- foreach::foreach(dotComb=columnsCombinations, .packages = c('Rcpp'))%do%{
+    splittedName<- unlist(stringr::str_split(dotComb,pattern = '->'))
     exog.name<- splittedName[[1]]
     endog.name<- splittedName[[2]]
     .exog<- columnsHistory[[exog.name]]
     .endog<- columnsHistory[[endog.name]]
-    
+    # store the result of each lag of each column
+    laggedRes<- list()
+    for ( .lag in lags ){
+      ..exog<- dplyr::lag(.exog,n=as.integer(.lag))
+      ..endog<- .endog
+      print(exog.name)
+      print(endog.name)
+      res<- stat_bllcorr_doesExogPredictsEndogCateg(exog=..exog,endog=..endog)
+      laggedRes[[dotComb]][[.lag]]<- res
+    }
+    laggedRes
   }
+
+  lagsResults<<- lagsResults
+  stop()
 
 }
