@@ -36,19 +36,21 @@ NumericVector stat_bllcorr_downOrUp(NumericVector x){
 //' @return a NumericVector of the result of the coparison
 //[[Rcpp::export]]
 NumericVector stat_bllcorr_doesExogPredictsEndogCateg(NumericVector exog, NumericVector endog){
+    // bellow will check if the size of exog is equal endog
     if ( exog.size() != endog.size() ){
         throw -100;
-    }
+    };
     NumericVector result;
     // 1: 'same direction'
     // 0: 'unconsider'
     // -1: 'reverse direction'
+    Rcout<< endog.size();
     for (int i=0; i< exog.size();i++ ){
         double valExog= exog[i];
         double valEndog= endog[i];
         if ( ISNA(valExog) || ISNA(valEndog) || valExog==0 || valEndog==0 ){
             result.push_back(0);
-        }else if ( valExog==1 && valEndog==1 ){
+        }else if ( valExog==valEndog ){
             // has predicted same direction
             result.push_back(1);
         }else if ( (valExog==1 && valEndog==-1) || (valExog==-1 && valEndog==1) ){
@@ -56,6 +58,7 @@ NumericVector stat_bllcorr_doesExogPredictsEndogCateg(NumericVector exog, Numeri
             result.push_back(-1);
         };
     };
+    // check if the size of result is equal the exog that is equal endog
     if ( result.size() != exog.size() ){
         throw -100;
     };
