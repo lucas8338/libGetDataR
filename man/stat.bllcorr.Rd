@@ -2,7 +2,7 @@
 % Please edit documentation in R/stat.R
 \name{stat.bllcorr}
 \alias{stat.bllcorr}
-\title{stat.billcor: still doing}
+\title{stat.billcorr: binary logical leading correlation.}
 \usage{
 stat.bllcorr(
   data,
@@ -14,6 +14,36 @@ stat.bllcorr(
   threads.type = "PSOCK"
 )
 }
+\arguments{
+\item{data}{a dataframe containing the data}
+
+\item{step}{is a multipler how much bars take to do a guess, for example a 'step=32' this mean:
+'check if the lasts 32 rows of endog can predict what will happen along of the nexts 32 rows
+of endog'. so if the param 'lag=1' the lag will become 32 cause the data will be taken at
+chunks of 32.}
+
+\item{endog.columns}{the columns i want to check if some of the exog columns can predict}
+
+\item{exog.columns}{columns i want check if these can predicts endog.}
+
+\item{lags}{a vector or single value to lags}
+
+\item{threads.num}{the number of threads to do in parallel through foreach}
+
+\item{threads.type}{the type of thread, can be for now "PSOCK (windows) or FORK (unix-like)."}
+}
 \description{
-stat.billcor: still doing
+this will do a 'binary' correlation to whether or not exog can predit
+the endog, to explain the idea under this functions is simple, imagine an air-cooler
+you increase the power of this air-cooler (reduce the target temperature), for example, to
+17 degrees, you know the final temperature of the room will be 17 degrees, but you
+dont know which temperature will be after 10 seconds, cause the temperature for the next
+10 seconds will consider a lot of factors, like, external temperature, and anothers. but you
+know the temperature will fall. This iw what this function is able to predict
+this get the information whether the value of endog is raised from the last row and
+will check if the bar has raised or fall in endog, if is raised too this will set a falue of
+1 or -1 if falled instead, 0 for unconsider (like NA's), at end the bigger of -1 or 1 will
+taken and a percentage calculation will be done returning the result, so as you saw -1 means
+the correlation between exog predict endog is oposite, if the exog rises, the endog falls,
+so the percentage will be negative.
 }

@@ -13,7 +13,8 @@ stat_bllcorr_doesExogPredictsEndogCateg(exog, endog)
 \item{the}{NumericVector to check whether exog has predicted this}
 }
 \value{
-a NumericVector of the result of the coparison
+a NumericVector of the result of the coparison of the same size than input and
+with values: -1 (oposite direction), 0 (unconsider), 1 (same direction).
 }
 \description{
 the code bellow will do a comparison if the exog was capable to predict the endog

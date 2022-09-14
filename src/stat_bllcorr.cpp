@@ -1,3 +1,4 @@
+// this file contains function especific to work with the R function 'stat.bllcorr'.
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -7,7 +8,8 @@ using namespace Rcpp;
 //' if the any of the compairing values is NA the value is 0 ( unconsider ), 1 for has up
 //' -1 for has down
 //' @param x the a NumericVector with the values
-//' @return a NumeriVector with the same size that the 'x' parameter
+//' @return a NumeriVector with the same size that the 'x' parameter with the values:
+//' -1 (has fallen), 0 (unconsider), 1 (has raisen).
 // [[Rcpp::export]]
 NumericVector stat_bllcorr_downOrUp(NumericVector x){
     NumericVector result {0};
@@ -33,7 +35,8 @@ NumericVector stat_bllcorr_downOrUp(NumericVector x){
 //' @description the code bellow will do a comparison if the exog was capable to predict the endog
 //' @param exog a lagged NumericVector to check whether can predicts endog
 //' @param the NumericVector to check whether exog has predicted this
-//' @return a NumericVector of the result of the coparison
+//' @return a NumericVector of the result of the coparison of the same size than input and
+//' with values: -1 (oposite direction), 0 (unconsider), 1 (same direction).
 //[[Rcpp::export]]
 NumericVector stat_bllcorr_doesExogPredictsEndogCateg(NumericVector exog, NumericVector endog){
     // bellow will check if the size of exog is equal endog

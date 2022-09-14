@@ -7,7 +7,8 @@
 #' if the any of the compairing values is NA the value is 0 ( unconsider ), 1 for has up
 #' -1 for has down
 #' @param x the a NumericVector with the values
-#' @return a NumeriVector with the same size that the 'x' parameter
+#' @return a NumeriVector with the same size that the 'x' parameter with the values:
+#' -1 (has fallen), 0 (unconsider), 1 (has raisen).
 stat_bllcorr_downOrUp <- function(x) {
     .Call('_libGetDataR_stat_bllcorr_downOrUp', PACKAGE = 'libGetDataR', x)
 }
@@ -17,7 +18,8 @@ stat_bllcorr_downOrUp <- function(x) {
 #' @description the code bellow will do a comparison if the exog was capable to predict the endog
 #' @param exog a lagged NumericVector to check whether can predicts endog
 #' @param the NumericVector to check whether exog has predicted this
-#' @return a NumericVector of the result of the coparison
+#' @return a NumericVector of the result of the coparison of the same size than input and
+#' with values: -1 (oposite direction), 0 (unconsider), 1 (same direction).
 stat_bllcorr_doesExogPredictsEndogCateg <- function(exog, endog) {
     .Call('_libGetDataR_stat_bllcorr_doesExogPredictsEndogCateg', PACKAGE = 'libGetDataR', exog, endog)
 }

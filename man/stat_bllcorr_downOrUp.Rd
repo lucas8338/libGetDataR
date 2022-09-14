@@ -10,7 +10,8 @@ stat_bllcorr_downOrUp(x)
 \item{x}{the a NumericVector with the values}
 }
 \value{
-a NumeriVector with the same size that the 'x' parameter
+a NumeriVector with the same size that the 'x' parameter with the values:
+-1 (has fallen), 0 (unconsider), 1 (has raisen).
 }
 \description{
 bellow is a function that gets a numeric vector and return whether the value
