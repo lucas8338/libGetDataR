@@ -4,7 +4,7 @@
 \alias{util.generateForeachProgressBar}
 \title{util.generateForeachProgressBar: generates a foreach dopar progressbar}
 \usage{
-util.generateForeachProgressBar(iterations, ...)
+util.generateForeachProgressBar(iterations, style = 3, ...)
 }
 \arguments{
 \item{iterations}{the total number of iterations}

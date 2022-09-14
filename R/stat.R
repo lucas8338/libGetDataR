@@ -67,10 +67,11 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
   doSNOW::registerDoSNOW(cl)
   on.exit(parallel::stopCluster(cl))
 
+  # check if the nrow is divisible by step
   if ( step!=1 && nrow(data)%%step!=0 ){
-    data<- data[(1+(nrow(data)%%steps)),]
+    data<- data[((1+(nrow(data)%%step)):(nrow(data))),]
   }
-  stopifnot(nrow(data)%%steps==0)
+  stopifnot(nrow(data)%%step==0)
 
   # generates a sequence which rows i want for the data
   seqFilterDataframe<- seq(from=1,to=nrow(data),by=step)
@@ -89,7 +90,6 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
     # return the combs for each iteration of foreach's loop
     combs
   }
-  columnsCombinations<<- columnsCombinations
   # generate the results if the price/value is up or down for each column
   pg.it<- length(colnames(data))
   pg<- util.generateForeachProgressBar(pg.it)
@@ -122,28 +122,34 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
       ..endog<- .endog
       res<- stat_bllcorr_doesExogPredictsEndogCateg(exog=..exog,endog=..endog)
       laggedRes[['column']]<- dotComb
-      laggedRes[['result']][[as.character(.lag)]]<- res
+      laggedRes[['result']][[as.character(.lag * step)]]<- res
     }
     laggedRes
   }
-  lagsResults<<- lagsResults
-  # 'result.1' will be the percent of the values was most predicted
-  result.1<- data.frame(row.names = lags)
-  pg.it<- length(columnsCombinations)
+  # there something interesting at this point, at this point with the variable
+  # 'lagsResults' i can expand the funcionality and do what i have planned
+  # get the statics to identify wheter has occured a 'seasonal' like effect
+
+  # bellow will collect the results from 'lagsResults' and calculate the percent
+  # tusing a 'table' then will assign the percent of each lag to their row/column
+  # in a data.frame and will return a data.frame
+  pg.it<- length(lagsResults)
   pg<- util.generateForeachProgressBar(pg.it)
-  endDf<- foreach::foreach( item=lagsResults,.combine = cbind,.options.snow=pg )%dopar%{
-    endDf<- data.frame(row.names = lags)
-    for ( lagName in names(item[['result']]) ){
-      statistic<- item[['result']][[lagName]]
-      oposite<- statistic[['-1']]
-      favour<- statistic[['1']]
-      total<- oposite+favour
-      bigger<- max(c(oposite,favour))
-      percent<- bigger/total
-      endDf[lagName,item[['column']]]<- percent
+  endDf<- foreach::foreach( dotItem=lagsResults,.combine = cbind,.options.snow=pg )%dopar%{
+    endDf<- data.frame()
+    column<- dotItem[['column']]
+    for ( itemName in names(dotItem[['result']]) ){
+      statistic<- table(dotItem[['result']][[itemName]])
+      # the bellows variables get return from a tryCatch cause in table some items
+      # can not have all values '1' or '-1'
+      sameDirection<- tryCatch(statistic[['1']],error = function (e){0})
+      reverseDirection<- tryCatch(statistic[['-1']],error = function(e){0})
+      total<- sameDirection + reverseDirection
+      bigger<- max(c(sameDirection,reverseDirection))
+      percent<- bigger / total
+      endDf[itemName,column]<- percent
     }
     endDf
   }
   endDf
-
 }
