@@ -147,7 +147,7 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
       total<- sameDirection + reverseDirection
       bigger<- max(c(sameDirection,reverseDirection))
       percent<- bigger / total
-      endDf[itemName,column]<- percent
+      endDf[itemName,column]<- ifelse(sameDirection>reverseDirection,percent,-percent)
     }
     endDf
   }
