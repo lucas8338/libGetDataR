@@ -103,6 +103,7 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
   data<- data[seqFilterDataframe,unique(c(endog.columns,exog.columns))]
   # declare a variable containing all combinations of columns endog and exog
   # separated by '->'
+  print('step 1 of 3')
   columnsCombinations<- foreach::foreach(dotColumn=endog.columns,.combine='c')%dopar%{
 
     # will store the combination for each endog column
@@ -130,6 +131,7 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
   columnsHistory<- columnsHistoryDf
   invisible(gc())
   # bellow wil process the if or not the exog was capable to predict the endog
+  print('step 2 of 3')
   pg.it<- length(columnsCombinations)
   pg<- util.generateForeachProgressBar(pg.it)
   lagsResults<- foreach::foreach(dotComb=columnsCombinations, .packages = c('Rcpp'),.options.snow=pg)%dopar%{
@@ -156,6 +158,7 @@ stat.bllcorr<- function(data,step=1,endog.columns=colnames(data),exog.columns=co
   # bellow will collect the results from 'lagsResults' and calculate the percent
   # tusing a 'table' then will assign the percent of each lag to their row/column
   # in a data.frame and will return a data.frame
+  print('step 3 of 3')
   pg.it<- length(lagsResults)
   pg<- util.generateForeachProgressBar(pg.it)
   endDf<- foreach::foreach( dotItem=lagsResults,.combine = cbind,.options.snow=pg )%dopar%{
