@@ -33,10 +33,11 @@ chunks of 32.}
 \item{threads.type}{the type of thread, can be for now "PSOCK (windows) or FORK (unix-like)."}
 }
 \value{
-a dataframe containing the statistics: "'1ag'.sameDirection": the number of values that were at same direction
-than exog; "'lag'.reverseDirection": number of values were oposite direction; "'lag'.total": the sum of sameDirection
-and reverseDirection, this is the total of valid values, so the percent of the lags bellow this were obtained through:
-"max(c(sameDirection,reverseDirection)) / total".
+a dataframe containing the percent of 'how much the exog has predicted the binary direction (rise or fall)
+of the endog column, there too statistics about the columns, accessing the atributes of the column: "attributes(df[['column']])".
+this will return a data.frame containing info of 'sameDirection' (endog was in the same direction than exog);
+'reverseDirection' (endog was in oposite direction of exog); 'total' (the sum of 'sameDirection' and 'reverseDirection')
+this (total) is indented to used as a information o how much valid values.
 }
 \description{
 this will do a 'binary' correlation to whether or not exog can predit
