@@ -32,6 +32,12 @@ chunks of 32.}
 
 \item{threads.type}{the type of thread, can be for now "PSOCK (windows) or FORK (unix-like)."}
 }
+\value{
+a dataframe containing the statistics: 'stat.sameDirection': the number of values that were at same direction
+than exog; 'stat.reverseDirection': number of values were oposite direction; 'stat.total': the sum of sameDirection
+and reverseDirection, this is the total of valid values, so the percent of the legs bellow this were obtained through:
+"max(c(sameDirection,reverseDirection)) / total".
+}
 \description{
 this will do a 'binary' correlation to whether or not exog can predit
 the endog, to explain the idea under this functions is simple, imagine an air-cooler
