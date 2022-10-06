@@ -2,6 +2,7 @@
 
 S3method(split,x_y_timeseries_split)
 export(df.asfreq)
+export(df.mlSafeDropNa)
 export(scaler.min_max)
 export(stat.bllcorr)
 export(stat.ccm)
