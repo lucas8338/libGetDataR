@@ -4,7 +4,7 @@
 \alias{indica.supertrend}
 \title{indica.supertrend: supertrend indicator a indicator for trend}
 \usage{
-indica.supertrend(high, low, close, multi = 1, atr.n = 14)
+indica.supertrend(high, low, close, multi = 3, atr.n = 14)
 }
 \arguments{
 \item{high}{the high price of candlestick}

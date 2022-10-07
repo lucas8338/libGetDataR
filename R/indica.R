@@ -9,7 +9,7 @@
 #' @param atr.n<- the 'n' value param of the atr, used in formula
 #' @return a data.frame containing 2 columns 'upperBand' and 'lowerBand'
 #' @export
-indica.supertrend<- function(high,low,close,multi=1,atr.n=14){
+indica.supertrend<- function(high,low,close,multi=3,atr.n=14){
   hlc<- matrix(c(high,low,close),ncol = 3)
   colnames(hlc)<- c('high','low','close')
   atr<- TTR::ATR(hlc,n=atr.n)[,'atr']
