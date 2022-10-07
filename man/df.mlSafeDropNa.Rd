@@ -4,10 +4,14 @@
 \alias{df.mlSafeDropNa}
 \title{df.mlSafeDropNa: drop safely NA values only from start}
 \usage{
-df.mlSafeDropNa(df)
+df.mlSafeDropNa(df, removeFromStart = TRUE, removeFromEnd = TRUE)
 }
 \arguments{
 \item{df}{a data.frame}
+
+\item{removeFromStart}{whether is or not to remove NA's from the end}
+
+\item{removeFromEnd}{whether is or not to remove NA's starting from end of df}
 }
 \value{
 a data.frame

@@ -30,13 +30,26 @@ df.asfreq <- function(data,freq){
 #' this will not to remove NA's that are not at start of the data.frame, so the data in the middle
 #' of data.frame is safe
 #' @param df a data.frame
+#' @param removeFromStart whether is or not to remove NA's from the end
+#' @param removeFromEnd whether is or not to remove NA's starting from end of df
 #' @return a data.frame
 #' @export
-df.mlSafeDropNa<-function(df){
-  for ( rn in 1:(nrow(df)) ){
-    if ( any(is.na(df[rn,]))==FALSE ){
-      df<- df[rn:(nrow(df)),]
-      break
+df.mlSafeDropNa<-function(df,removeFromStart=TRUE,removeFromEnd=TRUE){
+  if ( removeFromStart==TRUE ){
+    for ( rn in 1:(nrow(df)) ){
+      if ( any(is.na(df[rn,]))==FALSE ){
+        df<- df[rn:(nrow(df)),]
+        break
+      }
+    }
+  }
+
+  if ( removeFromEnd==TRUE ){
+    for ( rn in (nrow(df)):1 ){
+      if ( any(is.na(df[rn,]))==FALSE ){
+        df<- df[1:rn,]
+        break
+      }
     }
   }
   df
