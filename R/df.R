@@ -25,7 +25,7 @@ df.asfreq <- function(data,freq){
   ndata
 }
 
-#' @title mlSafeDropNa: drop safely NA values only from start
+#' @title df.mlSafeDropNa: drop safely NA values only from start
 #' @description this function removes NA's values but differently from anothers NA's removers
 #' this will not to remove NA's that are not at start of the data.frame, so the data in the middle
 #' of data.frame is safe

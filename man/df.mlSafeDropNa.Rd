@@ -2,7 +2,7 @@
 % Please edit documentation in R/df.R
 \name{df.mlSafeDropNa}
 \alias{df.mlSafeDropNa}
-\title{mlSafeDropNa: drop safely NA values only from start}
+\title{df.mlSafeDropNa: drop safely NA values only from start}
 \usage{
 df.mlSafeDropNa(df)
 }
