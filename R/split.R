@@ -6,10 +6,9 @@ library(foreach)
 library(svMisc)
 library(compiler)
 
-#' @title xplit.x_y_timeseries_split: a function to split a data.frame into train/test
+#' @title split.x_y_timeseries_split: a function to split a data.frame into train/test
 #' @description this function will to split a data.frame into train/test to use it to
 #' train a machine learning model, this will just split will not to transform or anything
-#'
 #' @param data the data
 #' @param input_size number the size of input
 #' @param output_size number the size of output
@@ -20,7 +19,7 @@ library(compiler)
 #' @param wt_compress if or not to compress the generated sample part (compressing will reduce the file size but
 #' will take more time to save)
 #' @return list(data.x,data.y)
-#' @export
+#' @export split.x_y_timeseries_split
 split.x_y_timeseries_split <- function(data, input_size, output_size, auto_resize = TRUE, wt = 0, wt_dir = '', wt_name= "part{i}.rds", wt_compress = FALSE){
   sequence_size <- input_size + output_size
   if (nrow(data) %% sequence_size != 0){

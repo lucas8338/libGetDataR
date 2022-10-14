@@ -2,7 +2,7 @@
 % Please edit documentation in R/split.R
 \name{split.x_y_timeseries_split}
 \alias{split.x_y_timeseries_split}
-\title{xplit.x_y_timeseries_split: a function to split a data.frame into train/test}
+\title{split.x_y_timeseries_split: a function to split a data.frame into train/test}
 \usage{
 \method{split}{x_y_timeseries_split}(
   data,
