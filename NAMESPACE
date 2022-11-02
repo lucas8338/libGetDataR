@@ -2,6 +2,7 @@
 
 export(check.is_characterNumeric)
 export(df.asfreq)
+export(df.concat)
 export(df.mlSafeDropNa)
 export(indica.supertrend)
 export(metric.f1)

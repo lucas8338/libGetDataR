@@ -96,3 +96,18 @@ metric.f1<- function(true,predicted){
   calc
 
 }
+
+
+#' @title metric.accuracy
+#' @description calculates accuracy this way: length(which(predicted==true))/length(true)
+#' @param true a vector containing the corrects
+#' @param predicted a vector containing the predictions
+#' @return a double containing the result
+metric.accuracy<- function(true,predicted){
+  stopifnot("'true' and 'predicted' are'nt of the same typeof"=typeof(true)==typeof(predicted))
+  stopifnot("the size of 'true' and 'predicted' are different"=length(true)==length(predicted))
+
+  calc<- length(which(predicted==true))/length(true)
+
+  calc
+}

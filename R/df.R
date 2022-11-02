@@ -54,3 +54,69 @@ df.mlSafeDropNa<-function(df,removeFromStart=TRUE,removeFromEnd=TRUE){
   }
   df
 }
+
+#' @title df.concat
+#' @description do concatenation of two data.frame
+#' @param df1 first data.frame
+#' @param df2 second data.frame
+#' @param by can be 'rownames' or a name of column to use to add the missing values of this index.
+#' @param if sort (order) the result at end, cause this function uses 'rbind' to concatenate data.frames
+#' if a the value can be converted to numeric first, this will be converted to numeric firts.
+#' @param addMissingColumns the core of this function will work with 'rbind' this need both data.frames
+#' has the same columns. so this will add the missing columns missing columns for each data.frame.
+#' the default value for these columns is NA.
+#' @section todo:
+#' up to now this function will not work with missing cells values, so if there a cell with missing
+#' that has its value in the another data.frame this value will not be filled, this is one of wanted
+#' thing in a concatenation method, but for now i dont need this functionality.
+#' @return a data.frame
+#' @import dplyr
+#' @export
+df.concat<- function(df1,df2,by='rownames',sort=TRUE,addMissingColumns=TRUE){
+  # this will add the missing columns that there in a data.frame but not is present in another one.
+  if ( addMissingColumns==TRUE ){
+    df1.colnames<- colnames(df1)
+    df2.colnames<- colnames(df2)
+
+    df1.colnamesNotInDf2<- df1.colnames[which(df1.colnames %in% df2.colnames==FALSE)]
+    df2.colnamesNotInDf1<- df2.colnames[which(df2.colnames %in% df1.colnames==FALSE)]
+
+    if ( length(df1.colnamesNotInDf2)>0 ){
+      for ( name in df1.colnamesNotInDf2 ){
+        df2[[name]]<- NA
+      }
+    }
+
+    if ( length(df2.colnamesNotInDf1)>0 ){
+      for ( name in df2.colnamesNotInDf1 ){
+        df1[[name]]<- NA
+      }
+    }
+  }
+
+  # add the value to use to concatenate to a variable
+  if ( by=='rownames' ){
+    df1.by<- rownames(df1)
+    df2.by<- rownames(df2)
+  }else{
+    df1.by<- df1[[by]]
+    df2.by<- df2[[by]]
+  }
+
+  df2.notInDf1<- df2[which(df2.by %in% df1.by==FALSE),,drop=FALSE]
+
+  df1<- rbind(df1,df2.notInDf1)
+
+  if ( sort==TRUE ){
+    if ( by=='rownames' ){
+      df1.by<- rownames(df1)
+    }else{
+      df1.by<- df1[[by]]
+    }
+    if ( check.is_characterNumeric(df1.by) ){df1.by<- as.numeric(df1.by)}
+    df1<- df1[order(df1.by),,drop=FALSE]
+  }
+
+  df1
+
+}
