@@ -65,32 +65,24 @@ df.mlSafeDropNa<-function(df,removeFromStart=TRUE,removeFromEnd=TRUE){
 #' @param addMissingColumns the core of this function will work with 'rbind' this need both data.frames
 #' has the same columns. so this will add the missing columns missing columns for each data.frame.
 #' the default value for these columns is NA.
-#' @section todo:
-#' up to now this function will not work with missing cells values, so if there a cell with missing
-#' that has its value in the another data.frame this value will not be filled, this is one of wanted
-#' thing in a concatenation method, but for now i dont need this functionality.
 #' @return a data.frame
 #' @import dplyr
 #' @export
 df.concat<- function(df1,df2,by='rownames',sort=TRUE,addMissingColumns=TRUE){
+  df1.colnames<- colnames(df1)
+  df2.colnames<- colnames(df2)
+
+  df1.colnamesNotInDf2<- df1.colnames[which(df1.colnames %in% df2.colnames==FALSE)]
+  df2.colnamesNotInDf1<- df2.colnames[which(df2.colnames %in% df1.colnames==FALSE)]
+
   # this will add the missing columns that there in a data.frame but not is present in another one.
   if ( addMissingColumns==TRUE ){
-    df1.colnames<- colnames(df1)
-    df2.colnames<- colnames(df2)
-
-    df1.colnamesNotInDf2<- df1.colnames[which(df1.colnames %in% df2.colnames==FALSE)]
-    df2.colnamesNotInDf1<- df2.colnames[which(df2.colnames %in% df1.colnames==FALSE)]
-
-    if ( length(df1.colnamesNotInDf2)>0 ){
-      for ( name in df1.colnamesNotInDf2 ){
-        df2[[name]]<- NA
-      }
+    for ( name in df1.colnamesNotInDf2 ){
+      df2[[name]]<- NA
     }
 
-    if ( length(df2.colnamesNotInDf1)>0 ){
-      for ( name in df2.colnamesNotInDf1 ){
-        df1[[name]]<- NA
-      }
+    for ( name in df2.colnamesNotInDf1 ){
+      df1[[name]]<- NA
     }
   }
 
@@ -107,12 +99,25 @@ df.concat<- function(df1,df2,by='rownames',sort=TRUE,addMissingColumns=TRUE){
 
   df1<- rbind(df1,df2.notInDf1)
 
+  if ( by=='rownames' ){
+    df1.by<- rownames(df1)
+  }else{
+    df1.by<- df1[[by]]
+  }
+
+  # add the data of missing columns in df1 to df1
+  # another words the columns which was added in df1 cause them are in df2 but not in df1
+  # takes by default NA, so this part of code will iterate over each of them (missing columns)
+  # will then select the rownames which were too in both df1 and df2, AND are NA IN DF1, and
+  # will set the values of this variable by the values of that column in df2 for these rownames
+  for ( name in df2.colnamesNotInDf1 ){
+    # get the rownames of values that there in df1 and df2 and are NA in df1
+    selection<- df1.by[ which( is.na( df1[ df1.by[ which( df1.by %in% df2.by ) ],name ,drop=TRUE] ) ) ]
+    # set the values in df1
+    df1[selection,name]<- df2[selection,name,drop=TRUE]
+  }
+
   if ( sort==TRUE ){
-    if ( by=='rownames' ){
-      df1.by<- rownames(df1)
-    }else{
-      df1.by<- df1[[by]]
-    }
     if ( check.is_characterNumeric(df1.by) ){df1.by<- as.numeric(df1.by)}
     df1<- df1[order(df1.by),,drop=FALSE]
   }
