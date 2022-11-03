@@ -103,6 +103,7 @@ metric.f1<- function(true,predicted){
 #' @param true a vector containing the corrects
 #' @param predicted a vector containing the predictions
 #' @return a double containing the result
+#' @export
 metric.accuracy<- function(true,predicted){
   stopifnot("'true' and 'predicted' are'nt of the same typeof"=typeof(true)==typeof(predicted))
   stopifnot("the size of 'true' and 'predicted' are different"=length(true)==length(predicted))
