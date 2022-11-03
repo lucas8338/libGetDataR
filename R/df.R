@@ -56,7 +56,8 @@ df.mlSafeDropNa<-function(df,removeFromStart=TRUE,removeFromEnd=TRUE){
 }
 
 #' @title df.concat
-#' @description do concatenation of two data.frame
+#' @description do concatenation of two data.frame the order of columns will be defined by 'df1', so
+#' is recommended for performance to pass the bigger data.frame on df1.
 #' @param df1 first data.frame
 #' @param df2 second data.frame
 #' @param by can be 'rownames' or a name of column to use to add the missing values of this index.
@@ -77,13 +78,8 @@ df.concat<- function(df1,df2,by='rownames',sort=TRUE,addMissingColumns=TRUE){
 
   # this will add the missing columns that there in a data.frame but not is present in another one.
   if ( addMissingColumns==TRUE ){
-    for ( name in df1.colnamesNotInDf2 ){
-      df2[[name]]<- NA
-    }
-
-    for ( name in df2.colnamesNotInDf1 ){
-      df1[[name]]<- NA
-    }
+    df2[df1.colnamesNotInDf2]<- NA
+    df1[df2.colnamesNotInDf1]<- NA
   }
 
   # add the value to use to concatenate to a variable
@@ -91,8 +87,8 @@ df.concat<- function(df1,df2,by='rownames',sort=TRUE,addMissingColumns=TRUE){
     df1.by<- rownames(df1)
     df2.by<- rownames(df2)
   }else{
-    df1.by<- df1[[by]]
-    df2.by<- df2[[by]]
+    df1.by<- df1[[by]] %>% as.character()
+    df2.by<- df2[[by]] %>% as.character()
   }
 
   df2.notInDf1<- df2[which(df2.by %in% df1.by==FALSE),,drop=FALSE]
@@ -102,7 +98,7 @@ df.concat<- function(df1,df2,by='rownames',sort=TRUE,addMissingColumns=TRUE){
   if ( by=='rownames' ){
     df1.by<- rownames(df1)
   }else{
-    df1.by<- df1[[by]]
+    df1.by<- df1[[by]] %>% as.character()
   }
 
   # add the data of missing columns in df1 to df1
@@ -112,7 +108,7 @@ df.concat<- function(df1,df2,by='rownames',sort=TRUE,addMissingColumns=TRUE){
   # will set the values of this variable by the values of that column in df2 for these rownames
   for ( name in df2.colnamesNotInDf1 ){
     # get the rownames of values that there in df1 and df2 and are NA in df1
-    selection<- df1.by[ which( is.na( df1[ df1.by[ which( df1.by %in% df2.by ) ] %>% as.character(),name ,drop=TRUE] ) ) ]  %>% as.character()
+    selection<- df1.by[ which( is.na( df1[ df1.by[ which( df1.by %in% df2.by ) ] ,name ,drop=TRUE] ) ) ]
     # set the values in df1
     df1[selection,name]<- df2[selection,name,drop=TRUE]
   }
