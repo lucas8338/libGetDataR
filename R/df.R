@@ -112,7 +112,7 @@ df.concat<- function(df1,df2,by='rownames',sort=TRUE,addMissingColumns=TRUE){
   # will set the values of this variable by the values of that column in df2 for these rownames
   for ( name in df2.colnamesNotInDf1 ){
     # get the rownames of values that there in df1 and df2 and are NA in df1
-    selection<- df1.by[ which( is.na( df1[ df1.by[ which( df1.by %in% df2.by ) ],name ,drop=TRUE] ) ) ]
+    selection<- df1.by[ which( is.na( df1[ df1.by[ which( df1.by %in% df2.by ) ],name ,drop=TRUE] ) ) ]  %>% as.character()
     # set the values in df1
     df1[selection,name]<- df2[selection,name,drop=TRUE]
   }

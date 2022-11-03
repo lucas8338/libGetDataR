@@ -26,10 +26,3 @@ a data.frame
 \description{
 do concatenation of two data.frame
 }
-\section{todo}{
-
-up to now this function will not work with missing cells values, so if there a cell with missing
-that has its value in the another data.frame this value will not be filled, this is one of wanted
-thing in a concatenation method, but for now i dont need this functionality.
-}
-
