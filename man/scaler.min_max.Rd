@@ -4,7 +4,7 @@
 \alias{scaler.min_max}
 \title{scaler.min_max: a min_max scaler}
 \usage{
-scaler.min_max(data, columns)
+scaler.min_max(data, columns = "all")
 }
 \arguments{
 \item{data:}{is the data to be applied the transformation}

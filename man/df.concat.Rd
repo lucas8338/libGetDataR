@@ -24,5 +24,6 @@ if a the value can be converted to numeric first, this will be converted to nume
 a data.frame
 }
 \description{
-do concatenation of two data.frame
+do concatenation of two data.frame the order of columns will be defined by 'df1', so
+is recommended for performance to pass the bigger data.frame on df1.
 }
