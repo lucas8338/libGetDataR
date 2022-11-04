@@ -4,12 +4,12 @@ library(dplyr)
 library(glue)
 
 #' @title scaler.min_max: a min_max scaler
-#' @param data: is the data to be applied the transformation
-#' @param column: a vector/list wtth the names of columns to apply the transformation
+#' @param data is the data to be applied the transformation
+#' @param columns a vector/list wtth the names of columns to apply the transformation
 #' @return: return a instance of class 'scaler.min_max' to use the 'predict' method
 #' @export
-scaler.min_max <- function(data, columns='all'){
-  if ( columns=='all' ){columns<- colnames(data)}
+scaler.min_max <- function(data, columns=NULL){
+  if ( is.null(columns) ){columns<- colnames(data)}
 
   for ( column in columns ){
     if ( is.numeric(data[[column]])==FALSE ){

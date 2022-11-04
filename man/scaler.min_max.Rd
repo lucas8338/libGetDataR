@@ -4,12 +4,12 @@
 \alias{scaler.min_max}
 \title{scaler.min_max: a min_max scaler}
 \usage{
-scaler.min_max(data, columns = "all")
+scaler.min_max(data, columns = NULL)
 }
 \arguments{
-\item{data:}{is the data to be applied the transformation}
+\item{data}{is the data to be applied the transformation}
 
-\item{column:}{a vector/list wtth the names of columns to apply the transformation}
+\item{columns}{a vector/list wtth the names of columns to apply the transformation}
 }
 \value{
 : return a instance of class 'scaler.min_max' to use the 'predict' method
