@@ -4,7 +4,7 @@
 \alias{scaler.min_max}
 \title{scaler.min_max: a min_max scaler}
 \usage{
-scaler.min_max(data, columns = NULL)
+scaler.min_max(data, columns = colnames(data))
 }
 \arguments{
 \item{data}{is the data to be applied the transformation}
@@ -12,8 +12,15 @@ scaler.min_max(data, columns = NULL)
 \item{columns}{a vector/list wtth the names of columns to apply the transformation}
 }
 \value{
-: return a instance of class 'scaler.min_max' to use the 'predict' method
+return a instance of class 'scaler.min_max' to use the 'predict' method
 }
 \description{
-scaler.min_max: a min_max scaler
+a min-max scaler. a very common scaling thecnique.
+IS NOT RECOMMENDED TO USE THIS SCALING METHOD TO MACHINE LEARNING PURPOSE!
+CAUSE IT CAN HAVE LOOKAHEAD BIAS.
+read: Practical Time Series Analysis, Aileen Nielsen, pag. 421.
 }
+\section{Formula}{
+ (x-min) / (max-min).
+}
+

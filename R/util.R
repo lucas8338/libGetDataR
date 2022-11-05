@@ -12,3 +12,11 @@ util.generateForeachProgressBar<- function(iterations, style=3,...){
   opts <- list(progress = progress)
   opts
 }
+
+#' @title util.progress_format
+#' @description a format string for general use for progress progress_bar
+#' @return a string to pass to 'format' parameter of "progress::progress_bar$new" function
+#' @export
+util.progress_format<- function(){
+  "progress: :current/:total | rate: :tick_rateit/s | elapsed: :elapsedfull | eta: :eta"
+}

@@ -10,6 +10,28 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// Rcpp_math_mean
+double Rcpp_math_mean(NumericVector data);
+RcppExport SEXP _libGetDataR_Rcpp_math_mean(SEXP dataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type data(dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rcpp_math_mean(data));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Rcpp_math_standardDeviation
+double Rcpp_math_standardDeviation(NumericVector data);
+RcppExport SEXP _libGetDataR_Rcpp_math_standardDeviation(SEXP dataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type data(dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rcpp_math_standardDeviation(data));
+    return rcpp_result_gen;
+END_RCPP
+}
 // stat_bllcorr_downOrUp
 NumericVector stat_bllcorr_downOrUp(NumericVector x);
 RcppExport SEXP _libGetDataR_stat_bllcorr_downOrUp(SEXP xSEXP) {
@@ -35,6 +57,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_libGetDataR_Rcpp_math_mean", (DL_FUNC) &_libGetDataR_Rcpp_math_mean, 1},
+    {"_libGetDataR_Rcpp_math_standardDeviation", (DL_FUNC) &_libGetDataR_Rcpp_math_standardDeviation, 1},
     {"_libGetDataR_stat_bllcorr_downOrUp", (DL_FUNC) &_libGetDataR_stat_bllcorr_downOrUp, 1},
     {"_libGetDataR_stat_bllcorr_doesExogPredictsEndogCateg", (DL_FUNC) &_libGetDataR_stat_bllcorr_doesExogPredictsEndogCateg, 2},
     {NULL, NULL, 0}

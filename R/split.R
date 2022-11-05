@@ -34,8 +34,10 @@ split.x_y_timeseries_split <- function(data, input_size, output_size, auto_resiz
   data.y <- list()
   iters <- 1:((nrow(data) - sequence_size) + 1)
 
+  pg<- progress::progress_bar$new(total=length(iters),format=util.progress_format())
+
   process<-function (i){
-    svMisc::progress(i, length(iters))
+    pg$tick()
     visible.data <- data[i:(sequence_size + (i - 1)),]
     x<- visible.data[1:input_size,]
     y<- visible.data[(input_size + 1):nrow(visible.data),]
