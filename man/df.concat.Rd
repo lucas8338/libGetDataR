@@ -4,7 +4,7 @@
 \alias{df.concat}
 \title{df.concat}
 \usage{
-df.concat(df1, df2, by = "rownames", sort = TRUE, addMissingColumns = TRUE)
+df.concat(df1, df2, sort = TRUE)
 }
 \arguments{
 \item{df1}{first data.frame}
@@ -13,12 +13,12 @@ df.concat(df1, df2, by = "rownames", sort = TRUE, addMissingColumns = TRUE)
 
 \item{by}{can be 'rownames' or a name of column to use to add the missing values of this index.}
 
+\item{if}{sort (order) the result at end, cause this function uses 'rbind' to concatenate data.frames
+if a the value can be converted to numeric first, this will be converted to numeric firts.}
+
 \item{addMissingColumns}{the core of this function will work with 'rbind' this need both data.frames
 has the same columns. so this will add the missing columns missing columns for each data.frame.
 the default value for these columns is NA.}
-
-\item{if}{sort (order) the result at end, cause this function uses 'rbind' to concatenate data.frames
-if a the value can be converted to numeric first, this will be converted to numeric firts.}
 }
 \value{
 a data.frame
