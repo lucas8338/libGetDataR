@@ -83,12 +83,10 @@ df.concat<- function(df1,df2,sort=TRUE){
   df1<- rbind(df1,df2.notInDf1)
 
   # add the data of missing columns in df1 that are in df2 to df1
-  for ( column in df2.colnamesNotInDf1 ){
-    # the two lines of code above 'df2.notInDf1' and the row with rbind
-    # make the df1 have all rows in df1 and df2, so will use the rownames
-    # of df2 to add and get missing datas
-    df1[rownames(df2),column]<- df2[rownames(df2),column]
-  }
+  # the two lines of code above 'df2.notInDf1' and the row with rbind
+  # make the df1 have all rows in df1 and df2, so will use the rownames
+  # of df2 to add and get missing datas
+  df1[rownames(df2),df2.colnamesNotInDf1]<- df2[rownames(df2),df2.colnamesNotInDf1]
 
   if ( sort==TRUE ){
     if ( check.is_characterNumeric(rownames(df1)) ){
