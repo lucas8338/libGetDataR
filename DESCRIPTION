@@ -1,6 +1,6 @@
 Package: libGetDataR
 Title: general purpose library to manipulate data
-Version: 1.0.0.0
+Version: 3.0.0.0
 Authors@R: 
     person("Lucas", "Monteiro", , "lucas.ma8338@gmail.com", role= c('cre'))
 Description: this library contains useful functions and tools.
