@@ -2,10 +2,54 @@
 % Please edit documentation in R/transf.R
 \name{transf.diff}
 \alias{transf.diff}
-\title{transf.diff do differenciation}
+\title{transf.diff}
 \usage{
 transf.diff(data, lag = 1, differences = 1)
 }
+\arguments{
+\item{data}{a numeric vector.}
+
+\item{lag}{an integer indicating which lag to use.}
+
+\item{differences}{an integer indicating the order of the difference.}
+}
+\value{
+If \code{x} is a vector of length \code{n} and \code{differences = 1},
+  then the computed result is equal to the successive differences
+  \code{x[(1+lag):n] - x[1:(n-lag)]}.
+
+  If \code{difference} is larger than one this algorithm is applied
+  recursively to \code{x}.
+  Note that the returned value is a vector which is shorter than
+  \code{x}.
+
+  If \code{x} is a matrix then the difference operations are carried out
+  on each column separately.
+}
 \description{
-like the base diff() function but preserving the size of the data
+Returns suitably lagged and iterated differences.
+}
+\details{
+\code{diff} is a generic function with a default method and ones for
+  classes \code{"\link{ts}"}, \code{"\link[base]{POSIXt}"} and
+  \code{"\link[base]{Date}"}.
+
+  \code{\link[base]{NA}}'s propagate.
+}
+\examples{
+diff(1:10, 2)
+diff(1:10, 2, 2)
+x <- cumsum(cumsum(1:10))
+diff(x, lag = 2)
+diff(x, differences = 2)
+
+diff(.leap.seconds)
+}
+\references{
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+  \emph{The New S Language}.
+  Wadsworth & Brooks/Cole.
+}
+\seealso{
+\code{\link{diff.ts}}, \code{\link{diffinv}}.
 }

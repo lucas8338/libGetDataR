@@ -56,16 +56,11 @@ df.mlSafeDropNa<-function(df,removeFromStart=TRUE,removeFromEnd=TRUE){
 }
 
 #' @title df.concat
-#' @description do concatenation of two data.frame the order of columns will be defined by 'df1', so
-#' is recommended for performance to pass the bigger data.frame on df1.
+#' @description do concatenation of two data.frame by rownames
 #' @param df1 first data.frame
 #' @param df2 second data.frame
-#' @param by can be 'rownames' or a name of column to use to add the missing values of this index.
-#' @param if sort (order) the result at end, cause this function uses 'rbind' to concatenate data.frames
+#' @param sort the result at end, cause this function uses 'rbind' to concatenate data.frames
 #' if a the value can be converted to numeric first, this will be converted to numeric firts.
-#' @param addMissingColumns the core of this function will work with 'rbind' this need both data.frames
-#' has the same columns. so this will add the missing columns missing columns for each data.frame.
-#' the default value for these columns is NA.
 #' @return a data.frame
 #' @import dplyr
 #' @export

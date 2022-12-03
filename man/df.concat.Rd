@@ -11,19 +11,12 @@ df.concat(df1, df2, sort = TRUE)
 
 \item{df2}{second data.frame}
 
-\item{by}{can be 'rownames' or a name of column to use to add the missing values of this index.}
-
-\item{if}{sort (order) the result at end, cause this function uses 'rbind' to concatenate data.frames
+\item{sort}{the result at end, cause this function uses 'rbind' to concatenate data.frames
 if a the value can be converted to numeric first, this will be converted to numeric firts.}
-
-\item{addMissingColumns}{the core of this function will work with 'rbind' this need both data.frames
-has the same columns. so this will add the missing columns missing columns for each data.frame.
-the default value for these columns is NA.}
 }
 \value{
 a data.frame
 }
 \description{
-do concatenation of two data.frame the order of columns will be defined by 'df1', so
-is recommended for performance to pass the bigger data.frame on df1.
+do concatenation of two data.frame by rownames
 }

@@ -1,12 +1,12 @@
 Package: libGetDataR
-Title: general pupose library to manipulate data
-Version: 2.0.1
+Title: general purpose library to manipulate data
+Version: 1.0.0.0
 Authors@R: 
     person("Lucas", "Monteiro", , "lucas.ma8338@gmail.com", role= c('cre'))
-Description: -
-License: -
+Description: this library contains useful functions and tools.
+License: Apache-2.0 + file LICENSE
 Encoding: UTF-8
 LazyData: true
-depends: dplyr, glue, svMisc, foreach, doParallel, parallel, progress, runner
-RoxygenNote: 7.2.1
+Depends: R (>= 3.5.0), doParallel, dplyr, foreach
+RoxygenNote: 7.2.2
 LinkingTo: Rcpp
